@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 const RegisterPage = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const [role, setRole] = useState('buyer');
 
   
 
@@ -17,12 +18,7 @@ const RegisterPage = () => {
     const user = Object.fromEntries(formData.entries());
 
     const { data, error } = await authClient.signUp.email({
-      name: user.name, // required
-      email: user.email, // required
-      password: user.password, // required
-      image: user.image,
-      phone: user.phone,
-      location: user.location
+      ...user
     });
     console.log("signup",user)
     console.log(data, error)
@@ -105,14 +101,15 @@ const RegisterPage = () => {
 
           <form onSubmit={handleRegister} className="mt-6 flex flex-col gap-4">
             {/* I want to */}
-            {/* <div>
+            
+              <div>
               <label className="text-sm font-medium text-slate-700">I want to</label>
               <div className="mt-1.5 grid grid-cols-2 gap-3">
                 <button
                   type="button"
-                  onClick={() => handleRoleSelect('buyer')}
+                  onClick={() => setRole('buyer')}
                   className={`rounded-lg border px-4 py-2.5 text-sm font-medium transition ${
-                    formData.role === 'buyer'
+                    role === 'buyer'
                       ? 'border-teal-600 bg-teal-50 text-teal-700 ring-1 ring-teal-600'
                       : 'border-slate-300 text-slate-600 hover:bg-slate-50'
                   }`}
@@ -121,9 +118,9 @@ const RegisterPage = () => {
                 </button>
                 <button
                   type="button"
-                  onClick={() => handleRoleSelect('seller')}
+                  onClick={() => setRole('seller')}
                   className={`rounded-lg border px-4 py-2.5 text-sm font-medium transition ${
-                    formData.role === 'seller'
+                    role === 'seller'
                       ? 'border-teal-600 bg-teal-50 text-teal-700 ring-1 ring-teal-600'
                       : 'border-slate-300 text-slate-600 hover:bg-slate-50'
                   }`}
@@ -131,7 +128,10 @@ const RegisterPage = () => {
                   Sell Products
                 </button>
               </div>
-            </div> */}
+              {/* Hidden input — eta ekhon FormData.entries() e "role" hishebe dhora porbe */}
+              <input type="hidden" name="role" value={role} />
+            </div>
+            
 
             <div>
               <label htmlFor="name" className="text-sm font-medium text-slate-700">
