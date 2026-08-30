@@ -95,13 +95,11 @@ const Navbar = () => {
               <Link href="/login" className="text-sm font-medium text-slate-600 hover:text-teal-700 transition">
                 Login
               </Link>
-              <Button
-                as={Link}
-                href="/register"
+              <Link href="/register"><Button
                 className="rounded-lg bg-teal-700 px-5 font-medium text-white hover:bg-teal-800 transition"
               >
                 Register
-              </Button>
+              </Button></Link>
             </>
           )}
         </div>
@@ -127,7 +125,7 @@ const Navbar = () => {
               ) : (
                 <>
                   <Link href="/login" className="block py-2 text-sm">Login</Link>
-                  <Button className="w-full rounded-lg bg-teal-700 text-white">Register</Button>
+                  <Link href='/register'><Button className="w-full rounded-lg bg-teal-700 text-white">Register</Button></Link>
                 </>
               )}
             </li>
