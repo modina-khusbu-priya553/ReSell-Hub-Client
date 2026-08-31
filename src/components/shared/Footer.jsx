@@ -1,8 +1,10 @@
+'use client'
 import React from "react";
 import { Link } from "@heroui/react";
 import { FaFacebook, FaLinkedin } from "react-icons/fa";
 import { AiFillInstagram } from "react-icons/ai";
 import { FaXTwitter } from "react-icons/fa6";
+import { usePathname } from "next/navigation";
 
 const QUICK_LINKS = [
   { label: "Home", href: "/" },
@@ -20,6 +22,12 @@ const SOCIAL_LINKS = [
 ];
 
 const Footer = () => {
+
+  const pathname = usePathname()
+    if (pathname.includes("dashboard")){
+      return null
+  };
+
   return (
     <footer className="relative overflow-hidden bg-slate-900 text-slate-300">
       {/* top gradient accent line */}
