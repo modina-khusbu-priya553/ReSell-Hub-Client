@@ -35,7 +35,7 @@ const MENU_ITEMS = {
   ],
   admin: [
     { label: "Overview", href: "/dashboard/admin", icon: MdSpaceDashboard },
-    { label: "Manage Users", href: "/dashboard/admin/users", icon: MdOutlineGroup },
+    { label: "Manage Users", href: "/dashboard/admin/", icon: MdOutlineGroup },
     { label: "Manage Products", href: "/dashboard/admin/products", icon: MdOutlineInventory2 },
     { label: "Manage Orders", href: "/dashboard/admin/orders", icon: MdOutlineAssignment },
     { label: "Platform Analytics", href: "/dashboard/admin/analytics", icon: MdOutlineBarChart },
