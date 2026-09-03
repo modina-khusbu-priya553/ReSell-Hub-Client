@@ -15,7 +15,7 @@ const AddProducts = () => {
   const { data: session } = authClient.useSession();
   const user = session?.user;
 
-     const [condition, setCondition] = useState('Used');
+    const [condition, setCondition] = useState('Used');
   const [images, setImages] = useState(['']);
   const [quantity, setQuantity] = useState(1);
  
@@ -31,6 +31,27 @@ const AddProducts = () => {
   const addImageField = () => {
     if (images.length < 4) setImages([...images, '']);
   };
+
+
+  const handleAddProduct = async(e) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData.entries());
+
+    const productData = {
+      ...data,
+      images: images.filter((url) => url.trim() !== ''),
+       sellerInfo: {
+        userId: user?.id,
+        name: user?.name,
+        email: user?.email,
+        phone: user?.phone,
+      },
+      status: 'available',
+    };
+    console.log('Form Data:', data);
+    console.log('Product Data:', productData);
+  }
   return (
     <div className="mx-auto max-w-4xl">
       <div className="mb-6">
@@ -40,7 +61,7 @@ const AddProducts = () => {
         </p>
       </div>
 
-      <form className="rounded-xl border border-slate-200 bg-white p-6 md:p-8">
+      <form onSubmit={handleAddProduct} className="rounded-xl border border-slate-200 bg-white p-6 md:p-8">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-5">
           {/* Left: Images */}
           <div className="lg:col-span-2">
@@ -219,7 +240,7 @@ const AddProducts = () => {
         </div>
 
         {/* Seller info — auto-filled, read-only, not manually typed */}
-        {/* <div className="mt-6 flex items-center gap-3 rounded-lg bg-slate-50 px-4 py-3">
+        <div className="mt-6 flex items-center gap-3 rounded-lg bg-slate-50 px-4 py-3">
           <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-teal-500/10 text-xs font-semibold text-teal-700">
             {user?.name?.charAt(0)}
           </div>
@@ -231,13 +252,13 @@ const AddProducts = () => {
         <div className="mt-6 flex gap-3 border-t border-slate-200 pt-6">
           <button
             type="submit"
-            disabled={submitting}
+            
             className="flex items-center gap-2 rounded-lg bg-teal-700 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-teal-800 disabled:opacity-60"
           >
             <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
             </svg>
-            {submitting ? 'Publishing...' : 'Publish Product'}
+           
           </button>
           <button
             type="reset"
@@ -246,7 +267,7 @@ const AddProducts = () => {
           >
             Reset
           </button>
-        </div> */}
+        </div>
       </form>
     </div>
   );
