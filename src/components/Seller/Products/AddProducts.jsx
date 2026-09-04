@@ -9,7 +9,7 @@ const CATEGORIES = ['Electronics', 'Furniture', 'Vehicles', 'Fashion', 'Mobile P
 const CONDITIONS = ['Used', 'Like New', 'Refurbished'];
 
 
-const AddProducts = () => {
+const AddProducts = ({addProductDataAction}) => {
 
 
   const { data: session } = authClient.useSession();
@@ -51,6 +51,7 @@ const AddProducts = () => {
     };
     console.log('Form Data:', data);
     console.log('Product Data:', productData);
+    await addProductDataAction(productData);
   }
   return (
     <div className="mx-auto max-w-4xl">
