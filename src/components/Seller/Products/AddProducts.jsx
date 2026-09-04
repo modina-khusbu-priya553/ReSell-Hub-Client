@@ -16,6 +16,7 @@ import {
   Button,
 } from "@heroui/react";
 import { uploadImage } from "@/lib/imageBB";
+import { addProduct } from "@/lib/data";
 
 const CATEGORIES = [
   "Electronics",
@@ -26,7 +27,7 @@ const CATEGORIES = [
 ];
 const CONDITIONS = ["Used", "Like New", "Refurbished"];
 
-const AddProducts = ({ addProductDataAction }) => {
+const AddProducts = () => {
   const { data: session } = authClient.useSession();
   const user = session?.user;
 
@@ -83,7 +84,7 @@ const AddProducts = ({ addProductDataAction }) => {
 
     console.log("Product Data:", productData);
 
-    await addProductDataAction(productData);
+    await addProduct(productData);
   };
 
   return (
