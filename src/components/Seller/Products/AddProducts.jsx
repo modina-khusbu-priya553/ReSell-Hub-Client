@@ -17,6 +17,9 @@ import {
 } from "@heroui/react";
 import { uploadImage } from "@/lib/imageBB";
 import { addProduct } from "@/lib/data";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+
 
 const CATEGORIES = [
   "Electronics",
@@ -30,6 +33,7 @@ const CONDITIONS = ["Used", "Like New", "Refurbished"];
 const AddProducts = () => {
   const { data: session } = authClient.useSession();
   const user = session?.user;
+  const router = useRouter();
 
   const [condition, setCondition] = useState("Used");
   const [category, setCategory] = useState(null);
@@ -81,10 +85,17 @@ const AddProducts = () => {
       },
       status: "available",
     };
+  
+    try {
+      const result = await addProduct(productData);
+      toast.success("Product added successfully!");
+      router.push("/dashboard/seller/products");
+      router.refresh();
+    } catch (error) {
+      toast.error("Failed to add product.");
+    }
 
-    console.log("Product Data:", productData);
-
-    await addProduct(productData);
+    
   };
 
   return (
@@ -268,9 +279,7 @@ const AddProducts = () => {
             </div>
 
             {/* Condition — HeroUI RadioGroup */}
-            <Label className="text-sm font-medium text-slate-700">
-              Condition
-            </Label>
+            
             <RadioGroup
               name="condition"
               value={condition}
@@ -278,6 +287,9 @@ const AddProducts = () => {
               orientation="horizontal"
               className="gap-2"
             >
+              <Label className="text-sm font-medium text-slate-700">
+              Condition
+            </Label>
               <div className="mt-1.5 grid grid-cols-3 gap-2">
                 {CONDITIONS.map((c) => (
                   <Radio key={c} value={c} className="cursor-pointer">

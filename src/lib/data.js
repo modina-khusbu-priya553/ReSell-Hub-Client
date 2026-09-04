@@ -8,7 +8,18 @@ export const addProduct = async (productData) => {
         },
         body: JSON.stringify(productData)
     });
-    const data = await res.json();
+   
+   const data = await res.json();
+
     console.log('Product added:', data);
     return data;
+}
+
+// get products api for seller
+export const getSellerProducts = async (sellerProductsData) => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/product`);
+    const data = await res.json();
+    console.log('Seller products:', data);
+    return data;
+
 }
