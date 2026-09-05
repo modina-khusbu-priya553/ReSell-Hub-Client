@@ -21,3 +21,10 @@ export const getSellerProducts = async (sellerProductsData) => {
     return data;
 
 }
+
+// get details of a single product for seller
+export const getProductDetails = async (productId) => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/product/${productId}`);
+    const data = await res.json();
+    return data;
+};

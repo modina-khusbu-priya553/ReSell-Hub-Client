@@ -17,14 +17,21 @@ const ROLE_BADGE = {
 
 
 
+
 const DashboardNavbar = ({ onMenuClick }) => {
-     const router = useRouter();
+  const router = useRouter();
   const pathname = usePathname();
   const { data: session } = authClient.useSession();
   const user = session?.user;
 
-  const pageTitle =
-    pathname.split("/").filter(Boolean).slice(-1)[0]?.replace(/-/g, " ") || "overview";
+  const segments = pathname.split("/").filter(Boolean);
+  const lastSegment = segments[segments.length - 1];
+  const isObjectId = /^[0-9a-f]{24}$/i.test(lastSegment);
+
+  const pageTitle = isObjectId
+    ? segments[segments.length - 2]?.replace(/-/g, " ")
+    : lastSegment?.replace(/-/g, " ") || "overview";
+
 
   const handleSignOut = async () => {
     await authClient.signOut();

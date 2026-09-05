@@ -4,9 +4,11 @@ import { Table } from "@heroui/react";
 import Image from 'next/image';
 import EditProduct from './EditProduct';
 import DeleteProducts from './DeleteProducts';
+import Link from 'next/link';
+import { FaRegEye } from 'react-icons/fa';
 
 const ProductRow = ({ product, updateProductAction, deleteProductAction }) => {
-  const { title, category, condition, price, quantity, status, images } = product;
+  const { _id, title, category, condition, price, quantity, status, images } = product;
 
   return (
     <Table.Row className="transition hover:bg-slate-50">
@@ -39,6 +41,13 @@ const ProductRow = ({ product, updateProductAction, deleteProductAction }) => {
       </Table.Cell>
       <Table.Cell className="px-5 py-3">
         <div className="flex items-center justify-end gap-2">
+          <Link
+            href={`/dashboard/seller/products/${_id}`}
+            className="rounded-lg p-2 text-slate-500 transition hover:bg-teal-50 hover:text-teal-700"
+            aria-label="View product details"
+          >
+            <FaRegEye className="size-4.5" />
+          </Link>
           <EditProduct product={product} updateProductAction={updateProductAction} />
           <DeleteProducts product={product} deleteProductAction={deleteProductAction} />
         </div>
