@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 
+
 // Patch api for update products
 export const updateProduct = async (productId, formData) => {
     const updatedProduct = Object.fromEntries(formData.entries());
@@ -27,4 +28,18 @@ export const updateProduct = async (productId, formData) => {
     }
     console.log('Updated product:', data);
     return data;
-}
+};
+
+// Delete api for delete products
+export const deleteProduct = async (productId) => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/product/${productId}`, {
+        method: 'DELETE',
+        
+    });
+    const data = await res.json();
+    if (data.deletedCount > 0) {
+        revalidatePath(`/dashboard/seller/products`);
+        redirect(`/dashboard/seller/products`);
+    }
+    return data;
+};
