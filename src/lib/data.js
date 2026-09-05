@@ -11,7 +11,6 @@ export const addProduct = async (productData) => {
    
    const data = await res.json();
 
-    console.log('Product added:', data);
     return data;
 }
 
@@ -19,7 +18,6 @@ export const addProduct = async (productData) => {
 export const getSellerProducts = async (sellerProductsData) => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/product`);
     const data = await res.json();
-    console.log('Seller products:', data);
     return data;
 
 }

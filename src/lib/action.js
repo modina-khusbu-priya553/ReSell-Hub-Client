@@ -1,6 +1,7 @@
 'use server'
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 
 // Patch api for update products
@@ -17,13 +18,13 @@ export const updateProduct = async (productId, formData) => {
         },
         body: JSON.stringify(updatedProduct)
     });
-    if (!res.ok) {
-        throw new Error('Failed to update product');
-    }
+   
     const data = await res.json();
 
     if (data.modifiedCount > 0) {
         revalidatePath(`/dashboard/seller/products`);
+        
     }
+    console.log('Updated product:', data);
     return data;
 }

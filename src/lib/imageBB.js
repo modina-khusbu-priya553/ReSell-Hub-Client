@@ -7,7 +7,6 @@ export const uploadImage = async (imageFile) => {
         body: formData
     });
     const data = await res.json();
-    console.log('Image uploaded:', data);
     return data.data
    
 }

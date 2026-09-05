@@ -1,7 +1,6 @@
 "use client";
 import DashboardNavbar from "@/components/Dashboard/DashboardNavbar";
 import DashboardSidebar from "@/components/Dashboard/DashboardSidebar";
-// import LoadingDashboard from "@/components/Dashboard/LoadingDashboard";
 import { Suspense } from 'react'
 import { useState } from "react";
 import Loading from "./loading";

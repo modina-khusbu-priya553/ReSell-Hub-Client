@@ -47,6 +47,8 @@ const EditProduct = ({ product, updateProductAction }) => {
   } = product;
   const productId = _id;
 
+  const [isOpen, setIsOpen] = useState(false);
+
   const [images, setImages] = useState(initialImages || []);
   const [uploading, setUploading] = useState(false);
 
@@ -80,16 +82,19 @@ const EditProduct = ({ product, updateProductAction }) => {
       const update = await updateProductAction(productId, formData);
       toast.success("Product updated successfully");
       router.refresh();
+       setIsOpen(false);
       return update;
+      
     } catch (error) {
       toast.error("Failed to update product");
     }
   };
 
   return (
-    <Modal>
+    <Modal isOpen={isOpen} onOpenChange={setIsOpen}>
       <Button
         variant="secondary"
+        onPress={() => setIsOpen(true)}
         className="rounded-lg p-2 text-slate-500 transition hover:bg-teal-50 hover:text-teal-700"
         aria-label="Edit product"
       >

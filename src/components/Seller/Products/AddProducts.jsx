@@ -20,7 +20,6 @@ import { addProduct } from "@/lib/data";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
-
 const CATEGORIES = [
   "Electronics",
   "Furniture",
@@ -85,7 +84,7 @@ const AddProducts = () => {
       },
       status: "available",
     };
-  
+
     try {
       const result = await addProduct(productData);
       toast.success("Product added successfully!");
@@ -94,8 +93,6 @@ const AddProducts = () => {
     } catch (error) {
       toast.error("Failed to add product.");
     }
-
-    
   };
 
   return (
@@ -279,7 +276,7 @@ const AddProducts = () => {
             </div>
 
             {/* Condition — HeroUI RadioGroup */}
-            
+
             <RadioGroup
               name="condition"
               value={condition}
@@ -288,8 +285,8 @@ const AddProducts = () => {
               className="gap-2"
             >
               <Label className="text-sm font-medium text-slate-700">
-              Condition
-            </Label>
+                Condition
+              </Label>
               <div className="mt-1.5 grid grid-cols-3 gap-2">
                 {CONDITIONS.map((c) => (
                   <Radio key={c} value={c} className="cursor-pointer">

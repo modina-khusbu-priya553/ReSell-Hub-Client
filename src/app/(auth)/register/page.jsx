@@ -20,8 +20,7 @@ const RegisterPage = () => {
     const { data, error } = await authClient.signUp.email({
       ...user
     });
-    console.log("signup",user)
-    console.log(data, error)
+   
 
     
 

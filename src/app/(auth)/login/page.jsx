@@ -17,14 +17,14 @@ const LoginPage = () => {
      e.preventDefault();
         const formData = new FormData(e.currentTarget);
         const user = Object.fromEntries(formData.entries());
-        console.log(user)
+        
 
         const { data, error } = await authClient.signIn.email({
             email: user.email, // required
             password: user.password, // required
             rememberMe: true,
         })
-        console.log(data, error)
+     
 
         if(data){
             router.push("/");
