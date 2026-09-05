@@ -6,7 +6,7 @@ import SearchAndFilter from './SearchAndFilter';
 import ProductRow from './ProductRow';
 
 const SellerProductsData = ({products}) => {
-    console.log('Products data:', products);
+   
   return (
     <div>
       <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">

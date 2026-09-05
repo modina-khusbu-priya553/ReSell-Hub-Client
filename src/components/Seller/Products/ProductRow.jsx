@@ -3,9 +3,10 @@ import React from 'react';
 import { Table } from "@heroui/react";
 import Image from 'next/image';
 import Link from 'next/link';
+import EditProduct from './EditProduct';
 
 const ProductRow = ({ product }) => {
-  const { _id, title, category, condition, price, quantity, status, images } = product;
+  const { title, category, condition, price, quantity, status, images } = product;
 
   return (
     <Table.Row className="transition hover:bg-slate-50">
@@ -38,15 +39,7 @@ const ProductRow = ({ product }) => {
       </Table.Cell>
       <Table.Cell className="px-5 py-3">
         <div className="flex items-center justify-end gap-2">
-          <Link
-            href={`/dashboard/seller/my-products/edit/${_id}`}
-            className="rounded-lg p-2 text-slate-500 transition hover:bg-teal-50 hover:text-teal-700"
-            aria-label="Edit product"
-          >
-            <svg className="h-4.5 w-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.8}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.4-9.4a2.1 2.1 0 013 3L12 15l-4 1 1-4 9.6-9.4z" />
-            </svg>
-          </Link>
+          <EditProduct product={product} />
           <button className="rounded-lg p-2 text-slate-500 transition hover:bg-red-50 hover:text-red-600" aria-label="Delete product">
             <svg className="h-4.5 w-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.8}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.87 12.14A2 2 0 0116.14 21H7.86a2 2 0 01-1.99-1.86L5 7m5 4v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3M4 7h16" />
