@@ -5,7 +5,7 @@ import Link from 'next/link';
 import SearchAndFilter from './SearchAndFilter';
 import ProductRow from './ProductRow';
 
-const SellerProductsData = ({products}) => {
+const SellerProductsData = ({products, updateProductAction}) => {
    
   return (
     <div>
@@ -53,7 +53,7 @@ const SellerProductsData = ({products}) => {
 
                 <Table.Body className="divide-y divide-slate-100">
                   {products.map((product) => (
-                    <ProductRow key={product._id} product={product} />
+                    <ProductRow key={product._id} product={product} updateProductAction={updateProductAction} />
                   ))}
                 </Table.Body>
               </Table.Content>

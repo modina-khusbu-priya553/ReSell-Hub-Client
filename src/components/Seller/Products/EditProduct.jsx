@@ -16,7 +16,10 @@ import {
   RadioGroup,
   Radio,
 } from "@heroui/react";
-
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { uploadImage } from "@/lib/imageBB";
+import { useState } from "react";
 
 const CATEGORIES = [
   "Electronics",
@@ -25,20 +28,67 @@ const CATEGORIES = [
   "Fashion",
   "Mobile Phones",
 ];
+
 const CONDITIONS = ["Used", "Like New", "Refurbished"];
 const STATUSES = ["available", "unavailable", "sold out"];
 
-const EditProduct = ({ product }) => {
-  const { title, category, condition, price, quantity, status, images, description } = product;
-  
+const EditProduct = ({ product, updateProductAction }) => {
+  const router = useRouter();
+  const {
+    _id,
+    title,
+    category,
+    condition,
+    price,
+    quantity,
+    status,
+    images: initialImages,
+    description,
+  } = product;
+  const productId = _id;
+
+  const [images, setImages] = useState(initialImages || []);
+  const [uploading, setUploading] = useState(false);
+
+  const handleImageUpload = async (e) => {
+    const files = Array.from(e.target.files).slice(0, 4 - images.length);
+    if (files.length === 0) return;
+
+    setUploading(true);
+    try {
+      const uploaded = await Promise.all(
+        files.map(async (file) => {
+          const result = await uploadImage(file);
+          return result.url;
+        }),
+      );
+      setImages((prev) => [...prev, ...uploaded]);
+    } catch (err) {
+      toast.error("Image upload failed");
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const removeImage = (index) => {
-    setImages(images.filter((_, i) => i !== index));
+    setImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleUpdateProduct = async (formData) => {
+    formData.set("images", JSON.stringify(images));
+    try {
+      const update = await updateProductAction(productId, formData);
+      toast.success("Product updated successfully");
+      router.refresh();
+      return update;
+    } catch (error) {
+      toast.error("Failed to update product");
+    }
   };
 
   return (
     <Modal>
-       <Button
+      <Button
         variant="secondary"
         className="rounded-lg p-2 text-slate-500 transition hover:bg-teal-50 hover:text-teal-700"
         aria-label="Edit product"
@@ -62,7 +112,10 @@ const EditProduct = ({ product }) => {
             </Modal.Header>
 
             <Modal.Body className="max-h-[65vh] overflow-y-auto">
-              <Form className="flex flex-col gap-5">
+              <Form
+                action={handleUpdateProduct}
+                className="flex flex-col gap-5"
+              >
                 {/* Images */}
                 <div>
                   <Label className="text-sm font-medium text-slate-700">
@@ -75,7 +128,7 @@ const EditProduct = ({ product }) => {
                   <div className="mt-3 grid grid-cols-4 gap-3">
                     {images.map((url, index) => (
                       <div
-                        key={index}
+                        key={url + index}
                         className="group relative aspect-square overflow-hidden rounded-lg border border-slate-200 bg-slate-50"
                       >
                         <Image
@@ -107,38 +160,68 @@ const EditProduct = ({ product }) => {
                         </button>
                       </div>
                     ))}
+
                     {images.length < 4 && (
                       <label className="flex aspect-square cursor-pointer flex-col items-center justify-center gap-1 rounded-lg border-2 border-dashed border-slate-300 text-slate-400 transition hover:border-teal-500 hover:text-teal-600">
-                        <svg
-                          className="h-5 w-5"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                          strokeWidth={1.8}
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M12 4v16m8-8H4"
-                          />
-                        </svg>
-                        <span className="text-[10px]">Add</span>
+                        {uploading ? (
+                          <svg
+                            className="h-5 w-5 animate-spin text-teal-600"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            />
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8v8z"
+                            />
+                          </svg>
+                        ) : (
+                          <>
+                            <svg
+                              className="h-5 w-5"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.8}
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 4v16m8-8H4"
+                              />
+                            </svg>
+                            <span className="text-[10px]">Add</span>
+                          </>
+                        )}
                         <input
                           type="file"
                           accept="image/*"
+                          multiple
+                          onChange={handleImageUpload}
+                          disabled={uploading}
                           className="hidden"
                         />
                       </label>
                     )}
                   </div>
+
+                  {images.length === 0 && (
+                    <p className="mt-2 text-xs text-red-500">
+                      At least 1 image is required
+                    </p>
+                  )}
                 </div>
 
                 {/* Title */}
-                <TextField
-                  name="title"
-                  defaultValue={title}
-                  isRequired
-                >
+                <TextField name="title" defaultValue={title} isRequired>
                   <Label className="text-sm font-medium text-slate-700">
                     Product Title
                   </Label>
@@ -148,14 +231,16 @@ const EditProduct = ({ product }) => {
 
                 <div className="grid grid-cols-2 gap-4">
                   {/* Category */}
-                  <Select
-                    defaultValue={category}
-                    isRequired
-                  >
+                  <Select name="category" defaultValue={category} isRequired>
                     <Label className="text-sm font-medium text-slate-700">
                       Category
                     </Label>
-                    <Select.Trigger className="mt-1.5 w-full rounded-lg border border-slate-300 px-4 py-2.5 text-sm text-slate-900 outline-none transition focus:border-teal-600 focus:ring-2 focus:ring-teal-600/20">
+                    <Select.Trigger
+                      className="mt-1.5 w-full rounded-lg border
+                         border-slate-300 px-4 py-2.5 text-sm
+                         text-slate-900 outline-none transition focus:border-teal-600 
+                        focus:ring-2 focus:ring-teal-600/20"
+                    >
                       <Select.Value />
                       <Select.Indicator />
                     </Select.Trigger>
@@ -217,6 +302,7 @@ const EditProduct = ({ product }) => {
                 <div className="grid grid-cols-2 gap-4">
                   {/* Quantity */}
                   <NumberField
+                    name="quantity"
                     defaultValue={quantity}
                     minValue={0}
                   >
@@ -243,7 +329,7 @@ const EditProduct = ({ product }) => {
                   </NumberField>
 
                   {/* Status */}
-                  <Select defaultValue={status}>
+                  <Select name="status" defaultValue={status}>
                     <Label className="text-sm font-medium text-slate-700">
                       Status
                     </Label>
@@ -284,17 +370,19 @@ const EditProduct = ({ product }) => {
                   />
                   <FieldError className="text-xs text-red-500" />
                 </TextField>
+                <Modal.Footer>
+                  <Button variant="secondary" className="w-full" slot="close">
+                    Cancel
+                  </Button>
+                  <Button
+                    type="submit"
+                    className="w-full bg-teal-700 text-white hover:bg-teal-800"
+                  >
+                    Save Changes
+                  </Button>
+                </Modal.Footer>
               </Form>
             </Modal.Body>
-
-            <Modal.Footer>
-              <Button variant="secondary" className="w-full" slot="close">
-                Cancel
-              </Button>
-              <Button className="w-full bg-teal-700 text-white hover:bg-teal-800">
-                Save Changes
-              </Button>
-            </Modal.Footer>
           </Modal.Dialog>
         </Modal.Container>
       </Modal.Backdrop>

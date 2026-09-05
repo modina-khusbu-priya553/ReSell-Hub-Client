@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import EditProduct from './EditProduct';
 
-const ProductRow = ({ product }) => {
+const ProductRow = ({ product, updateProductAction }) => {
   const { title, category, condition, price, quantity, status, images } = product;
 
   return (
@@ -39,7 +39,7 @@ const ProductRow = ({ product }) => {
       </Table.Cell>
       <Table.Cell className="px-5 py-3">
         <div className="flex items-center justify-end gap-2">
-          <EditProduct product={product} />
+          <EditProduct product={product} updateProductAction={updateProductAction} />
           <button className="rounded-lg p-2 text-slate-500 transition hover:bg-red-50 hover:text-red-600" aria-label="Delete product">
             <svg className="h-4.5 w-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.8}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.87 12.14A2 2 0 0116.14 21H7.86a2 2 0 01-1.99-1.86L5 7m5 4v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3M4 7h16" />
