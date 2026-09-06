@@ -59,6 +59,7 @@ export async function POST(request) {
         },
       ],
       metadata: {
+        price: price,
         buyerId: buyerId,
         buyerName: buyerName,
         buyerEmail: buyerEmail,

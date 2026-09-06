@@ -169,7 +169,7 @@ const ProductDetailsCard = ({ product }) => {
           </div>
 
           <div className="mt-6 flex gap-3">
-            
+
             {/* data for payment */}
             <form action="/api/payment" method="POST">
               <input type="hidden" name="price" value={price} />
@@ -177,7 +177,7 @@ const ProductDetailsCard = ({ product }) => {
               <input type="hidden" name="title" value={title} />
               <input type="hidden" name="image" value={images} />
               <input type="hidden" name="quantity" value={quantity} />
-              <input type="hidden" name="sellerId" value={sellerInfo?.id} />
+              <input type="hidden" name="sellerId" value={sellerInfo?.userId} />
               <input type="hidden" name="sellerName" value={sellerInfo?.name} />
               <input
                 type="hidden"

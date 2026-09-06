@@ -10,6 +10,7 @@ export default async function Success({ searchParams }) {
 
   const {
     status,
+    metadata,
     customer_details: { email: customerEmail }
   } = await stripe.checkout.sessions.retrieve(session_id, {
     expand: ['line_items', 'payment_intent']
@@ -20,6 +21,7 @@ export default async function Success({ searchParams }) {
   }
 
   if (status === 'complete') {
+    console.log(metadata)
     return (
       <section id="success">
         <p>
