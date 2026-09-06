@@ -7,8 +7,12 @@ import DeleteProducts from './DeleteProducts';
 import Link from 'next/link';
 import { FaRegEye } from 'react-icons/fa';
 
+
 const ProductRow = ({ product, updateProductAction, deleteProductAction }) => {
+
+  
   const { _id, title, category, condition, price, quantity, status, images } = product;
+ 
 
   return (
     <Table.Row className="transition hover:bg-slate-50">
